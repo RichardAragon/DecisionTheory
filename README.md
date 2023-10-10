@@ -1,4 +1,4 @@
-# DecisionTheory
+# Decision Theory
 A set of algorithms and equations utilizing First Order Predicate Calculus that provide a Decision Making Framework for LLM models
 
 In the face of uncertainty and when dealing with unknown variables and outcomes, Decision Theory provides a formal framework for making logical choices³. This theory is a branch of applied probability theory and analytic philosophy that is concerned with the process of making decisions based on assigning probabilities to various factors and assigning numerical consequences to the outcome¹.
