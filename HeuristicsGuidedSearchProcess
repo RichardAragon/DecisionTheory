@@ -1,0 +1,122 @@
+# A function that uses the HLPSA to use Heuristics to guide the search process
+def hlpsa_heuristics(problem, background):
+  # Represent the problem as a logical expression in FOPC using the background knowledge
+  lp = problem_to_fopc(problem, background)
+  # Check if the problem is solvable
+  if is_solvable(lp):
+    # Apply the Problem Identification and Solution Identification Equation
+    s = {x for x in lp if x.satisfies(lp)}
+    # Return the set of solutions
+    return s
+  else:
+    # Apply the Creating Sub Problems When Faced With Unsolvable Problems Equation
+    sp = {x for x in lp if x.is_subproblem_of(lp)}
+    # Initialize an empty set of solutions or subproblems
+    s = set()
+    # For each subproblem in sp
+    for subproblem in sp:
+      # Solve the subproblem using the LLM Fallback Algorithm with the background knowledge
+      os = llm_fallback(subproblem, background)
+      # Add the possible solutions or outcomes to s
+      s.update(os)
+    # Return the set of solutions or subproblems
+    return s
+
+# A helper function that converts a problem statement to a logical expression in FOPC using the background knowledge
+def problem_to_fopc(problem, background):
+  # TODO: Implement this function using a parser and a knowledge base
+  pass
+
+# A helper function that checks if a logical expression is solvable
+def is_solvable(expression):
+  # TODO: Implement this function using a solver or a prover
+  pass
+
+# A helper function that implements the LLM Fallback Algorithm with Heuristics search strategy
+def llm_fallback(query, background):
+  # Initialize an empty set of possible solutions or outcomes
+  solutions = set()
+  # Initialize an empty list of clauses to be resolved
+  clauses = []
+  # Convert the query and the background knowledge to Conjunctive Normal Form (CNF)
+  query_cnf = to_cnf(query)
+  background_cnf = to_cnf(background)
+  # Add the negation of the query to the background knowledge
+  background_cnf.add(negate(query_cnf))
+  # Add all the clauses from the background knowledge to the list of clauses
+  clauses.extend(background_cnf)
+  # While there are still clauses to resolve in the list of clauses
+  while clauses:
+    # Pick two clauses from the list of clauses using a Heuristic function
+    c1, c2 = pick_clauses(clauses, heuristic)
+    # Try to resolve them using Resolution
+    r = resolve(c1, c2)
+    # If resolution succeeds
+    if r:
+      # If r is an empty clause
+      if r.is_empty():
+        # Return no solution as the query is unsatisfiable
+        return {no solution}
+      # Else if r is not already in the solutions, resolvents, or clauses
+      elif r not in solutions and r not in resolvents and r not in clauses:
+        # Add r to the resolvents and clauses
+        resolvents.add(r)
+        clauses.append(r)
+        # If r is a unit clause (contains only one literal)
+        if r.is_unit():
+          # Add r to the solutions or outcomes
+          solutions.add(r)
+    # Remove c1 and c2 from the list of clauses
+    clauses.remove(c1)
+    clauses.remove(c2)
+  # If there are no more clauses to resolve in the list of clauses and no empty clause was found
+  if not clauses and not r.is_empty():
+    # Return the solutions or outcomes for the query
+    return solutions
+
+# A helper function that converts a logical expression to Conjunctive Normal Form (CNF)
+def to_cnf(expression):
+  # TODO: Implement this function using a converter or a transformer
+  pass
+
+# A helper function that negates a logical expression in CNF
+def negate(expression):
+  # TODO: Implement this function using De Morgan's laws and double negation elimination
+  pass
+
+# A helper function that picks two clauses from a list of clauses in CNF using a Heuristic function
+def pick_clauses(clauses, heuristic):
+  # TODO: Implement this function using a picker or a selector that uses some criteria based on the heuristic function
+  pass
+
+# A helper function that performs resolution on two clauses in CNF
+def resolve(clause1, clause2):
+  # TODO: Implement this function using a resolver or a matcher
+  pass
+
+# A helper function that defines a Heuristic function for guiding the search process
+def heuristic(clause):
+  # TODO: Implement this function using some measure of clause quality such as size, relevance, complexity, etc.
+  pass
+
+# Example usage
+
+# Define a problem statement and some background knowledge
+problem = "Find all blocks that are on blocks with different colors"
+background = {
+  "on(a,b)",
+  "on(b,c)",
+  "on(c,table)",
+  "color(a,red)",
+  "color(b,green)",
+  "color(c,blue)",
+  "(forall x)(forall y)(above(x,y) <-> (on(x,y) or (exists z)(on(x,z) and above(z,y))))",
+  "(forall x)(forall y)(on(x,y) -> not on(y,x))",
+  "(forall x)(forall y)(color(x,y) -> (exists z)(color(z,y) and not color(z,x)))"
+}
+
+# Call the hlpsa_heuristics function with the problem and background knowledge as input
+solutions = hlpsa_heuristics(problem, background)
+
+# Print the output
+print(solutions)
